@@ -3,8 +3,10 @@ maxemail-env
 
 Maxemail Vagrant Environment Install
 
-# git clone git-url directory-name
-# cd director-name
-# git submodule init
-# git submodule update
-# vagrant up
+``` sh
+git clone git-url directory-name
+cd directory-name
+git submodule init
+git submodule update
+vagrant up
+```
