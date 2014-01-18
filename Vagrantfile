@@ -9,7 +9,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define :web do |web_config|
     web_config.vm.box = "lucid64"
     web_config.vm.box_url = "http://files.vagrantup.com/lucid64.box"
-    web_config.vm.forward_port = 80
+    config.vm.network "forwarded_port", guest: 80, host: 8080
+
+    web_config.vm.provider "virtualbox" do |vb, override|
+        vb.customize ["modifyvm", :id, "--memory", 1024]
+        vb.customize ["modifyvm", :id, "--cpus", 2]
+
+        override.vm.synced_folder "data/", "/vagrant_data"
+    end
+
     web_config.vm.provision :puppet do |puppet|
       puppet.manifests_path = "puppet/manifests"
       puppet.manifest_file  = "initWeb.pp"
@@ -20,7 +28,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define :db do |db_config|
     db_config.vm.box = "lucid64"
     db_config.vm.box_url = "http://files.vagrantup.com/lucid64.box"
-    db_config.vm.forward_port = 3306
+    db_config.vm.network "forwarded_port", guest: 3306, host: 3306
+
+    db_config.vm.provider "virtualbox" do |vb, override|
+        vb.customize ["modifyvm", :id, "--memory", 1024]
+        vb.customize ["modifyvm", :id, "--cpus", 2]
+
+        override.vm.synced_folder "data/", "/vagrant_data"
+    end
+
     db_config.vm.provision :puppet do |puppet|
       puppet.manifests_path = "puppet/manifests"
       puppet.manifest_file  = "initDb.pp"
